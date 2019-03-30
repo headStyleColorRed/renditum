@@ -1,16 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import authModule from "./modules/auth.js"
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-
+    processing: false,
+    loaded: false,
   },
   mutations: {
-
   },
-  actions: {
-
+  modules: {
+    authModule,
   }
 })
