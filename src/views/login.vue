@@ -10,7 +10,14 @@
         <div class="email-bundle bundle">
           <label for="email" class="input-labels">Email</label>
           <div class="inputAndicon">
-            <input autocomplete="off" name="email" type="text" v-model="email" required class="input-line">
+            <input
+              autocomplete="off"
+              name="email"
+              type="text"
+              v-model="email"
+              required
+              class="input-line"
+            >
             <v-icon color="orange">email</v-icon>
           </div>
         </div>
@@ -19,7 +26,14 @@
           <label for="password" class="input-labels">Contraseña</label>
 
           <div class="inputAndicon">
-            <input autocomplete="off" name="password" type="password" v-model="password" required class="input-line">
+            <input
+              autocomplete="off"
+              name="password"
+              type="password"
+              v-model="password"
+              required
+              class="input-line"
+            >
             <v-icon color="orange">lock</v-icon>
           </div>
         </div>
@@ -28,7 +42,7 @@
           <label for="confContraseña" class="input-labels">Confirme Contraseña</label>
           <div class="inputAndicon">
             <input
-            autocomplete="off"
+              autocomplete="off"
               name="confContraseña"
               type="password"
               v-model="contraseñaConf"
@@ -135,13 +149,14 @@ export default {
             .onSnapshot(snapshot => {
               console.log(snapshot.data());
               this.$store.commit("setRole", snapshot.data().role);
-              //this.$router.push("/homePage");
+              this.$router.push("/landlordHome");
               console.log("login succesfull");
               this.loading = false;
             });
         })
         .catch(err => {
           console.log(err);
+          this.loading = false;
           if (err.code == "auth/user-not-found") {
             this.snackText = "This user doesn't exist!";
             this.showSnack = true;
@@ -191,9 +206,11 @@ export default {
             .set(DATA)
             .then(() => {
               this.$store.commit("setRole", DATA.role);
+              this.$router.push("/landlordHome");
             });
         })
         .catch(err => {
+          this.loading = false;
           if (err.code == "auth/email-already-in-use") {
             this.snackText = "This email is already in use.";
             this.showSnack = true;
