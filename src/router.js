@@ -1,21 +1,42 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from "./store.js"
+
+//S H A R E D 
+import login from './views/login.vue'
+
+// L A N D L O R D
 import landlordHome from './views/landlord/landlordHome.vue'
 import alquileres from './views/landlord/alquileres.vue'
+import landlordAgenda from './views/landlord/landlordAgenda.vue'
 import template from './views/landlord/template.vue'
+import newHouse from './views/landlord/newHouse.vue'
+
+//T E N A N T
 import tenantHome from './views/tenant/tenantHome.vue'
-import login from './views/login.vue'
+import arregloTemplate from './views/tenant/arregloTemplate.vue'
+import tenantChat from './views/tenant/chat.vue'
+import tenantAgenda from './views/tenant/tenantAgenda.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
+      path: '/',
+      name: 'login',
+      component: login
+    },
+    { path: "*", redirect: "/" },
+
+    // L A N D L O R D   R O U T E S
+    {
       path: '/landlordHome',
-      name: 'home',
-      component: landlordHome
+      name: 'landlordHome',
+      component: landlordHome,
+      meta: { Auth: true, title: "Home" },
     },
     {
       path: '/alquileres',
@@ -23,19 +44,57 @@ export default new Router({
       component: alquileres
     },
     {
+      path: '/landlordAgenda',
+      name: 'landlordAgenda',
+      component: landlordAgenda,
+      meta: { title: "Agenda" },
+    },
+    {
+      path: '/newHouse',
+      name: 'newHouse',
+      component: newHouse,
+      meta: { title: "nuevoAlquiler" },
+    },
+    {
       path: '/template',
       name: 'template',
       component: template
     },
+
+
+    // T E N A N T   R O U T E S
     {
       path: '/tenantHome',
       name: 'home',
-      component: tenantHome
+      component: tenantHome,
+      meta: { Auth: true, title: "Home" },
     },
     {
-      path: '/',
-      name: 'login',
-      component: login
+      path: '/arregloTemplate',
+      name: 'arregloTemplate',
+      component: arregloTemplate,
+    },
+    {
+      path: '/tenantChat',
+      name: 'tenantChat',
+      component: tenantChat,
+    },
+    {
+      path: '/tenantAgenda',
+      name: 'tenantAgenda',
+      component: tenantAgenda,
     },
   ]
+});
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+  if (to.meta.Auth && !store.state.authModule.logged) {
+    next({ path: "/" })
+  } else {
+    next();
+  }
 })
+
+export default router;
+

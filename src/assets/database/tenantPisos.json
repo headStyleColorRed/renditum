@@ -1,0 +1,90 @@
+{
+    "propiedades": {
+        "Sainz de Baranda": {
+            "nombre": "Sainz de Baranda",
+            "fecha": "12/06/2019",
+            "cantidad": "1.400",
+            "estado": "Alquilado",
+            "problemas": false,
+            "inquilinos": {
+                "0": {
+                    "nombre": "María del Mar Santillana",
+                    "dni": "738295572N",
+                    "telf": "606 413 997"
+                },
+                "1": {
+                    "nombre": "Francisco Agustín del Romero",
+                    "dni": "82740261K",
+                    "telf": "606 413 997"
+                }
+            },
+            "contrato":{
+                "comienzo": "12/06/2018",
+                "finalizacion": "12/06/2020",
+                "fianza": "1700"
+            },
+            "alertas":{
+            }
+        },
+        "Aguadero": {
+            "nombre": "Aguadero",
+            "fecha": "01/16/2019",
+            "cantidad": "0",
+            "estado": "Desocupado",
+            "problemas": false,
+            "inquilinos": {
+                "0": {
+                    "nombre": "Joaquín Reyes Altozano",
+                    "dni": "738295572N",
+                    "telf": "606 413 997"
+                }
+            },
+            "contrato":{
+                "comienzo": "12/06/2018",
+                "finalizacion": "12/06/2020",
+                "fianza": "1700"
+            },
+            "alertas":{
+            }
+        },
+        "Paseo de la Habana": {
+            "nombre": "Paseo de la Habana",
+            "fecha": "11/3/2019",
+            "cantidad": "1.200",
+            "estado": "Alquilado",
+            "problemas": true,
+            "inquilinos": {
+                "0": {
+                    "nombre": "Antonio López Aguilar",
+                    "dni": "27592537U",
+                    "telf": "606 413 997"
+                },
+                "1": {
+                    "nombre": "Mercedes Gómez Noya",
+                    "dni": "48296275L",
+                    "telf": "606 413 997"
+                }
+            },
+            "contrato":{
+                "comienzo": "12/06/2018",
+                "finalizacion": "12/06/2020",
+                "fianza": "1700"
+            },
+            "alertas":{
+                "0":{
+                    "titulo": "Grifo de la cocina necesita reparación",
+                    "contenido": "Hace un mes el grifo de la cocina empezó a moverse como si estuviese suelto y ayer mientras estaba lavando los platos se salío la parte de arriba entera y empezó a salir agua por todos lados. ¿Podría venir un fontanero a cambiarme el grifo? Muchas gracias, Antonio",
+                    "fotos":{},
+                    "documentos":{},
+                    "fecha":"01/16/2019"
+                }
+            }
+        }
+    },
+    "notificaciones": {
+        "0": {
+            "texto": "Grifo de la cocina necesita reparación.",
+            "key": "Paseo de la Habana"
+        }
+    }
+}

@@ -1,73 +1,142 @@
 <template>
   <div class="login">
-    <div class="loginWrapper">
-      <div class="welcomeText">
-        <div class="welcome">Bienvenido!</div>
-        <div class="subtitle" v-if="registering">La mejor plataforma de alquiler</div>
-        <div v-else class="subtitle">Échale un vistazo a tu contrato</div>
-      </div>
-      <div class="input-fields">
-        <div class="email-bundle bundle">
-          <label for="email" class="input-labels">Email</label>
-          <div class="inputAndicon">
-            <input
-              autocomplete="off"
-              name="email"
-              type="text"
-              v-model="email"
-              required
-              class="input-line"
-            >
-            <v-icon color="orange">email</v-icon>
+    <!-- L O G I N   C A R D -->
+    <div class="flip-card">
+      <div class="flip-card-inner" v-bind:style="{transform:giramelo}">
+        <div v-if="noGirado" class="flip-card-front">
+          <div class="loginWrapper">
+            <div class="welcomeText">
+              <div class="welcome">Bienvenido!</div>
+              <div class="subtitle" v-if="registering">La mejor plataforma de alquiler</div>
+              <div v-else class="subtitle">Échale un vistazo a tu contrato</div>
+            </div>
+
+            <div class="input-fields">
+              <div class="email-bundle bundle">
+                <label for="email" class="input-labels">Email</label>
+                <div class="inputAndicon">
+                  <input
+                    autocomplete="off"
+                    name="email"
+                    type="text"
+                    v-model="email"
+                    required
+                    class="input-line"
+                  >
+                  <v-icon color="orange">email</v-icon>
+                </div>
+              </div>
+
+              <div class="password-bundle bundle">
+                <label for="password" class="input-labels">Contraseña</label>
+
+                <div class="inputAndicon">
+                  <input
+                    autocomplete="off"
+                    name="password"
+                    type="password"
+                    v-model="password"
+                    required
+                    class="input-line"
+                  >
+                  <v-icon color="orange">lock</v-icon>
+                </div>
+              </div>
+
+              <div v-if="registering" class="password-bundle bundle">
+                <label for="confContraseña" class="input-labels">Confirme Contraseña</label>
+                <div class="inputAndicon">
+                  <input
+                    autocomplete="off"
+                    name="confContraseña"
+                    type="password"
+                    v-model="contraseñaConf"
+                    required
+                    class="input-line"
+                  >
+                  <v-icon color="orange">lock</v-icon>
+                </div>
+              </div>
+            </div>
+
+            <div class="links-to-register-login">
+              <div v-if="!registering" class="spacing">
+                O regístrate
+                <span v-on:click="registering = true" class="highlight">aquí!</span>
+              </div>
+
+              <div v-if="registering" class="spacing">
+                O vuelve al
+                <span v-on:click="registering = false" class="highlight">login</span>
+              </div>
+            </div>
+
+            <div class="loginAndRegisterButtons">
+              <div v-if="registering" class="recuadro">
+                <div v-if="loading" class="lds-roller">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+                <button v-else v-on:click="validateRegistering()" class="login-register">Regístrate</button>
+              </div>
+
+              <div v-else class="recuadro">
+                <div v-if="loading" class="lds-roller">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+                <button v-else v-on:click="validateLogin()" class="login-register">Log in</button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="password-bundle bundle">
-          <label for="password" class="input-labels">Contraseña</label>
-
-          <div class="inputAndicon">
-            <input
-              autocomplete="off"
-              name="password"
-              type="password"
-              v-model="password"
-              required
-              class="input-line"
-            >
-            <v-icon color="orange">lock</v-icon>
-          </div>
-        </div>
-
-        <div v-if="registering" class="password-bundle bundle">
-          <label for="confContraseña" class="input-labels">Confirme Contraseña</label>
-          <div class="inputAndicon">
-            <input
-              autocomplete="off"
-              name="confContraseña"
-              type="password"
-              v-model="contraseñaConf"
-              required
-              class="input-line"
-            >
-            <v-icon color="orange">lock</v-icon>
-          </div>
-        </div>
-      </div>
-
-      <div class="links-to-register-login">
-        <div v-if="!registering" class="spacing">
-          O regístrate
-          <span v-on:click="registering = true" class="highlight">aquí!</span>
-        </div>
-
-        <div v-if="registering" class="spacing">
-          O vuelve al
-          <span v-on:click="registering = false" class="highlight">login</span>
-        </div>
-      </div>
-
-      <div class="loginAndRegisterButtons">
-        <div v-if="registering" class="recuadro">
+        <!-- B A C K   P A R T-->
+        <div class="flip-card-back">
+          <div class="welcome">Último Paso</div>
+          <div class="inputsSecondPart">
+            <div class="inputSP">
+              <label for="nombre" class="input-labels-Back">Nombre</label>
+              <div class="inputAndicon">
+                <input
+                  autocomplete="off"
+                  name="nombre"
+                  type="text"
+                  v-model="nombre"
+                  required
+                  class="input-line"
+                >
+              </div>
+            </div>
+            <div class="inputSP">
+              <label for="apellidos" class="input-labels-Back">Apellidos</label>
+              <div class="inputAndicon">
+                <input
+                  autocomplete="off"
+                  name="apellidos"
+                  type="text"
+                  v-model="apellidos"
+                  required
+                  class="input-line"
+                >
+              </div>
+            </div>
+            <div class="seleccionDeRol">
+              <v-select :items="tenantOrLandlord" box label="Rol" v-model="role" dark></v-select>
+            </div>
+          </div><div class="recuadro">
           <div v-if="loading" class="lds-roller">
             <div></div>
             <div></div>
@@ -78,21 +147,8 @@
             <div></div>
             <div></div>
           </div>
-          <button v-else v-on:click="validateRegistering()" class="login-register">Regístrate</button>
+          <button v-else v-on:click="validateInfo()" class="login-register">Regístrate</button>
         </div>
-
-        <div v-else class="recuadro">
-          <div v-if="loading" class="lds-roller">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-          <button v-else v-on:click="validateLogin()" class="login-register">Log in</button>
         </div>
       </div>
     </div>
@@ -112,15 +168,31 @@ export default {
   data: () => ({
     snackText: "",
     showSnack: false,
-    password: "",
-    contraseñaConf: "",
-    email: "",
+    password: "123456",
+    contraseñaConf: "123456",
+    email: "irlandesmajere@hotmail.com",
     color: "primary",
     registering: false,
-    loading: false
+    loading: false,
+    giramelo: "",
+    noGirado: true,
+    nombre: "",
+    apellidos: "",
+    tenantOrLandlord: ["Arrendador", "Arrendatario"],
+    role: "",
+    user: {}
   }),
 
   methods: {
+    onChange(image) {
+      console.log("New picture selected!");
+      if (image) {
+        console.log("Picture loaded.");
+        this.image = image;
+      } else {
+        console.log("FileReader API not supported: use the <form>, Luke!");
+      }
+    },
     validateLogin() {
       if (this.password == "" || this.email == "") {
         this.snackText = "Please fill in all fields";
@@ -148,8 +220,19 @@ export default {
             .doc(loggedUser.user.uid)
             .onSnapshot(snapshot => {
               console.log(snapshot.data());
+              let finalUser = new Object();
+              finalUser["uid"] = snapshot.data().uid;
+              finalUser["email"] = snapshot.data().email;
+              finalUser["nombre"] = snapshot.data().nombre;
+
+              this.$store.commit("setUser", finalUser)
               this.$store.commit("setRole", snapshot.data().role);
-              this.$router.push("/landlordHome");
+
+              if (snapshot.data().role == "Arrendador") {
+                this.$router.push("/landlordHome");
+              } else {
+                this.$router.push("/tenantHome");
+              }
               console.log("login succesfull");
               this.loading = false;
             });
@@ -184,38 +267,68 @@ export default {
         this.snackText = "Passwords don't match, try again.";
         this.showSnack = true;
       } else {
-        this.register(this.email, this.password);
+        this.loading = true;
+        this.register();
       }
     },
-    register(email, password) {
+    register() {
       let user = new Object();
-      user["email"] = email;
-      user["password"] = password;
+      user["email"] = this.email;
+      user["password"] = this.password;
 
       this.$store
         .dispatch("firebaseRegister", user)
         .then(userRegistered => {
           const DATA = {
             uid: userRegistered.user.uid,
-            email: userRegistered.user.email,
-            role: "tenant"
+            email: userRegistered.user.email
           };
-
-          db.collection("users")
-            .doc(DATA.uid)
-            .set(DATA)
-            .then(() => {
-              this.$store.commit("setRole", DATA.role);
-              this.$router.push("/landlordHome");
-            });
+          this.loading = false;
+          this.giramelo = "rotateY(180deg)";
+          this.user = DATA;
+          console.log(DATA);
         })
         .catch(err => {
+          console.log(err);
           this.loading = false;
           if (err.code == "auth/email-already-in-use") {
             this.snackText = "This email is already in use.";
             this.showSnack = true;
+            this.giramelo = "";
           }
         });
+    },
+    validateInfo() {
+      if (this.nombre == "" || this.apellidos == "" || this.role == "") {
+        this.snackText = "Please fill in all fields";
+        this.showSnack = true;
+      } else {
+        this.registerInfo();
+      }
+    },
+    registerInfo() {
+      this.loading = true;
+      let DATA = new Object();
+      DATA["uid"] = this.user.uid;
+      DATA["email"] = this.user.email;
+      DATA["nombre"] = this.nombre;
+      DATA["apellidos"] = this.apellidos;
+      DATA["role"] = this.role;
+      db.collection("users")
+        .doc(DATA.uid)
+        .set(DATA)
+        .then(() => {
+          this.$store.commit("setRole", DATA.role);
+          if (DATA.role === "Arrendador") {
+            this.$router.push("/landlordHome");
+          } else {
+            this.$router.push("/tenantHome");
+          }
+          console.log("Ya estás registrado!");
+        });
+    },
+    girar() {
+      this.giramelo = "rotateY(180deg)";
     }
   },
   components: {}
@@ -232,10 +345,6 @@ export default {
 }
 
 .loginWrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background-color: rgb(66, 66, 66);
   width: 80vw;
   color: whitesmoke;
@@ -261,6 +370,15 @@ export default {
   letter-spacing: 0.02rem;
 }
 
+.subtitleBack {
+  text-align: center;
+  line-height: 1em;
+  font-weight: 100;
+  letter-spacing: 0px;
+  letter-spacing: 0.02rem;
+  margin-top: 1rem;
+}
+
 .input-fields {
   padding: 3rem 1rem;
   display: grid;
@@ -279,6 +397,7 @@ export default {
 .input-labels {
   font-size: 0.8rem;
   font-weight: 300;
+  text-align: left;
 }
 
 .inputAndicon {
@@ -331,6 +450,75 @@ input:focus {
   height: 4rem;
 }
 
+.inputSP {
+  display: grid;
+  margin: 1rem;
+  margin-top: 2rem;
+}
+
+.input-labels-Back {
+  font-size: 0.8rem;
+  font-weight: 300;
+  justify-self: left;
+}
+.seleccionDeRol {
+  margin: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 0;
+}
+
+.imagen {
+  margin: 0 1rem;
+}
+
+.boton {
+  margin: 1rem;
+}
+/*  F  L  I  P     C  A  R  D */
+
+/*  F  L  I  P     C  A  R  D */
+
+.flip-card {
+  background-color: transparent;
+  width: 300px;
+  height: 200px;
+  perspective: 1000px;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+/* Position the front and back side */
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 70%;
+  backface-visibility: hidden;
+}
+
+/* Style the back side */
+.flip-card-back {
+  background-color: rgb(66, 66, 66);
+  height: 72vh;
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.flip-card-back h3 {
+  margin-top: 2rem;
+}
+
 /*    S P I N E L L I    */
 .lds-roller {
   display: inline-block;
@@ -349,7 +537,7 @@ input:focus {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #fff;
+  background: #ffa500;
   margin: -3px 0 0 -3px;
 }
 .lds-roller div:nth-child(1) {

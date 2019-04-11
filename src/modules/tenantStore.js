@@ -1,25 +1,25 @@
 //import firebase from "firebase";
-import dataBase from "../assets/database/landlordPisos.json"
+import dataBase from "../assets/database/tenantPisos.json"
 
 export default {
     state:{
-        alquileres: dataBase,
-        template: "",
+      messages: {},
+      chatId: "",
     },
     mutations:{
-        setAlquileres: (state, alquileres) =>{
-            state.alquileres = alquileres;
-        },
-        setTemplate: (state, template) =>{
-            state.template = template;
-        }
+      setmessages: (state, messages) =>{
+          state.messages = messages;
+      },
+      setchatId: (state, chatId) =>{
+          state.chatId = chatId;
+      }
     },
     getters:{
-        alquileres: (state) =>{
-            return state.alquileres;
-        },
-        template: (state) =>{
-            return state.template;
-        },
+      messages: (state) =>{
+          return state.messages;
+      },
+      chatId: (state) =>{
+          return state.chatId;
+      },
     }
 }

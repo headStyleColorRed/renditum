@@ -3,7 +3,14 @@
     <div class="alquileresWrapp">
       <h1>Propiedades</h1>
 
-      <v-card hover position="relative" v-for="(piso, index) in propiedades" :key="index" class="propiedadThumbnail" v-on:click="haciaAlquiler(piso)">
+      <v-card
+        hover
+        position="relative"
+        v-for="(piso, index) in propiedades"
+        :key="index"
+        class="propiedadThumbnail"
+        v-on:click="haciaAlquiler(piso)"
+      >
         <h3>{{piso.nombre}}</h3>
         <div class="estado">
           <div class="innerstate">
@@ -17,19 +24,14 @@
           </div>
         </div>
         <!--   I C O N O S   I N D I C A D O R E S  -->
-         <v-btn
-         v-if="piso.problemas"
-         class="botonAlarma"
-              small
-              dark
-              fab
-              top
-              right
-              color="red"
-            >
-              <v-icon>notification_important</v-icon>
-            </v-btn>
+        <v-btn v-if="piso.problemas" class="botonAlarma" small dark fab top right color="red">
+          <v-icon>notification_important</v-icon>
+        </v-btn>
       </v-card>
+      <div style="display:grid" class="iconWrap">
+        
+      <v-icon class="icono" color="orange" v-on:click="newHouse()">add</v-icon>
+      </div>
     </div>
     <navbar/>
   </div>
@@ -40,35 +42,46 @@ import navbar from "../../components/navbar.vue";
 export default {
   data() {
     return {
-      propiedades: {}
+      propiedades: {},
     };
   },
   mounted() {
-    this.propiedades = this.$store.state.tenantModule.alquileres.propiedades;
+    this.propiedades = this.$store.getters.alquileres;
   },
   methods: {
-      haciaAlquiler(event){
-        if (event.estado == "Alquilado") {
-          this.$store.commit("setTemplate", event.nombre);
-          this.$router.push("/template");
-        }
-      }
+    haciaAlquiler(event) {
+        this.$store.commit("setTemplate", event.nombre);
+        this.$router.push("/template");
+    },
+    newHouse(){
+      this.$router.push("/newHouse")
+    }
   },
   computed: {},
   components: {
-    navbar
+    navbar,
   }
 };
 </script>
 
 <style scoped>
+.alquileres {
+  background-image: url("../../assets/fotos/backgroundTemplate.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.alquileresWrapp{
+  height: 100vh;
+  overflow-y: scroll;
+}
 .alquileresWrapp h1 {
   padding-top: 1rem;
   text-align: center;
-}
-.alquileres {
-  background-color: beige;
-  height: 100vh;
+  border-bottom: 2px solid orange;
+  padding-bottom: 0.5rem;
+  margin: 0 7rem;
+  font-family: "Libre Baskerville", serif;
 }
 
 .propiedadThumbnail {
@@ -87,7 +100,13 @@ export default {
   grid-template-columns: 1fr 1fr;
 }
 
-.botonAlarma{
-    position: absolute;
+.botonAlarma {
+  position: absolute;
+}
+
+.icono{
+  justify-self: center;
+  font-size: 2.5rem;
+  margin-bottom: 5rem;
 }
 </style>

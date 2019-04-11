@@ -9,11 +9,13 @@
             "inquilinos": {
                 "0": {
                     "nombre": "María del Mar Santillana",
-                    "dni": "738295572N"
+                    "dni": "738295572N",
+                    "telf": "606 413 997"
                 },
                 "1": {
                     "nombre": "Francisco Agustín del Romero",
-                    "dni": "82740261K"
+                    "dni": "82740261K",
+                    "telf": "606 413 997"
                 }
             },
             "contrato":{
@@ -33,7 +35,8 @@
             "inquilinos": {
                 "0": {
                     "nombre": "Joaquín Reyes Altozano",
-                    "dni": "738295572N"
+                    "dni": "738295572N",
+                    "telf": "606 413 997"
                 }
             },
             "contrato":{
@@ -53,11 +56,13 @@
             "inquilinos": {
                 "0": {
                     "nombre": "Antonio López Aguilar",
-                    "dni": "27592537U"
+                    "dni": "27592537U",
+                    "telf": "606 413 997"
                 },
                 "1": {
                     "nombre": "Mercedes Gómez Noya",
-                    "dni": "48296275L"
+                    "dni": "48296275L",
+                    "telf": "606 413 997"
                 }
             },
             "contrato":{

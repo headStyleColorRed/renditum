@@ -3,7 +3,7 @@ import firebase from "firebase";
 export default {
     state:{
         user: null,
-        role: "tenant",
+        role: "arrendador",
         logged: false,
     },
     actions:{
@@ -19,16 +19,12 @@ export default {
     },
     mutations:{
         setUser:(state, user) => {
-            if (user) {
                 state.user = {
                     uid: user.uid,
                     email: user.email,
+                    nombre: user.nombre,
                 };
                 state.logged = true;
-            } else {
-                state.user = null;
-                state.logged = false;
-            }
         },
         setRole: (state, role) =>{
             state.role = role;
@@ -41,8 +37,8 @@ export default {
         role: (state) =>{
             return state.role;
         },
-        isTenant: (state) =>{
-            return state.role === "tenant";
+        user: (state) =>{
+            return state.user;
         }
     }
 }

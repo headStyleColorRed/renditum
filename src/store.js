@@ -10,8 +10,19 @@ export default new Vuex.Store({
   state: {
     processing: false,
     loaded: false,
+    alquileres: {
+      loadIt: true,
+    },
   },
   mutations: {
+    setAlquileres: (state, alquileres) => {
+      state.alquileres = alquileres;
+    },
+  },
+  getters: {
+    alquileres: (state) => {
+      return state.alquileres;
+    },
   },
   modules: {
     authModule,

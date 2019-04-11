@@ -1,17 +1,17 @@
 <template>
   <v-card flat>
     <v-bottom-nav fixed :active.sync="bottomNav" :value="true">
-      <v-btn to="/landlordHome" color="orange darken-1" flat value="inicio">
+      <v-btn to="/tenantHome" color="orange darken-1" flat value="inicio">
         <span>Inicio</span>
         <v-icon>bar_chart</v-icon>
       </v-btn>
 
-      <v-btn to="alquileres" color="orange darken-1" flat value="favorites">
-        <span>Alquileres</span>
-        <v-icon>home</v-icon>
+      <v-btn to="/tenantChat" color="orange darken-1" flat value="favorites">
+        <span>Chat</span>
+        <v-icon>chat</v-icon>
       </v-btn>
 
-      <v-btn to="landlordAgenda" color="orange darken-1" flat value="nearby">
+      <v-btn to="/tenantAgenda" color="orange darken-1" flat value="nearby">
         <span>Agenda</span>
         <v-icon>book</v-icon>
       </v-btn>
