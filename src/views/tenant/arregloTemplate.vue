@@ -13,14 +13,27 @@
         </div>
         <div class="inputs">
           <h3>Documentos:</h3>
+          <input
+            class="nombreYdireccion"
+            type="text"
+            v-model="nombreDelDocumento"
+            maxlength="15"
+            placeholder="nombre del Documento"
+          >
           <input type="file" name="documentos" id="documentos" @change="processFile($event)">
         </div>
         <div class="inputs">
           <h3>Fotos:</h3>
-          <input type="file" name="documentos" id="documentos" @change="processFile($event)">
+          <input type="file" name="documentos" id="documentos" @change="processPIc($event)">
         </div>
 
-        <v-btn class="white--text" v-on:click="validateRegister()" color="blue lighten-1">Guardar</v-btn>
+        <v-progress-circular v-if="loading" indeterminate color="red"></v-progress-circular>
+        <v-btn
+          v-else
+          class="white--text"
+          v-on:click="validateRegister()"
+          color="blue lighten-1"
+        >Guardar</v-btn>
       </v-card>
     </div>
   </div>
@@ -33,18 +46,15 @@ export default {
   data() {
     return {
       tituloProblema: "",
-      descripcionProblema: "",
+      descripcionProblema: null,
+      nombreDelDocumento: null,
+      loading: false
     };
   },
   methods: {
     validateRegister() {
-      if (
-        this.tituloProblema == "" ||
-        this.direccionAlquiler == "" ||
-        this.provinciaAlquiler == "" ||
-        this.localidadAlquiler == "" ||
-        this.codigoPostalAlquiler <= 0
-      ) {
+      console.log("validando");
+      if (this.tituloProblema == "" || this.descripcionProblema == null) {
         this.snackText = "Rellene todos los campos!";
         this.showSnack = true;
       } else {
@@ -53,62 +63,111 @@ export default {
       }
     },
     registerarreglo() {
-      let user = this.$store.getters.user;
-      let userId = user.uid;
-      let userUidCortado = userId.slice(0, 5);
+      let user = this.$store.getters.user.uid;
       let event = this.fileEvent;
+      let eventPic = this.fileEventPic;
 
       if (event == null) {
         console.log("Sin documentos");
+        this.registerComent();
+      } else if (eventPic == null) {
+        console.log("Sin Fotos");
+        this.registerComent();
       } else {
         let ref = firebase.storage().ref();
-        let documentosAlquiler = event.target.files[0];
-        let nombreDeVivienda = documentosAlquiler.name;
+        let documentosAlquiler = new Object();
+        documentosAlquiler["documentos"] = event.target.files[0];
+        documentosAlquiler["fotos"] = eventPic.target.files[0];
         let metadata = { contentType: documentosAlquiler.type };
 
         const task = ref
-          .child(`${userUidCortado}/${nombreDeVivienda}`)
+          .child(`notificaciones/${this.$store.getters.chatRoom}`)
           .put(documentosAlquiler, metadata);
 
         task
           .then(snapshot => snapshot.ref.getDownloadURL())
           .then(url => {
-            console.log(url);
+            console.log("documento guardado");
+            this.registerComent(url);
           })
           .catch(console.error);
       }
-
-      let DATA = new Object();
-      DATA["nombre"] = this.tituloProblema;
-      DATA["direccion"] = this.direccionAlquiler;
-      DATA["provincia"] = this.provinciaAlquiler;
-      DATA["localidad"] = this.localidadAlquiler;
-      DATA["cp"] = this.codigoPostalAlquiler;
-      DATA["fecha"] = null;
-      DATA["cantidad"] = this.precioAlquiler;
-      DATA["problemas"] = false;
-      DATA["estado"] = "Desocupado";
-      DATA["notificaciones"] = new Object();
-      DATA["contrato"] = new Object();
-      DATA["inquilinos"] = new Object();
-      DATA["alertas"] = new Object();
-      DATA["notificaciones"] = new Object();
-
-      db.collection(`compartido/propiedades/${userUidCortado}`)
-        .doc(DATA.nombre)
-        .set(DATA)
-        .then(() => {
-          let empty = {
-            loadIt: true
-          };
-          this.$store.commit("setAlquileres", empty);
-          this.$router.push("/landlordHome");
-
-          console.log("Casa registrada!");
-        });
     },
     processFile(event) {
       this.fileEvent = event;
+    },
+    processPIc(eventPic) {
+      this.fileEventPic = eventPic;
+    },
+    registerComent(url) {
+      console.log("registrando documento");
+      let definitiveUrl = url;
+      if (url == null) {
+        console.log("no es na");
+        definitiveUrl = "Sin Documentos";
+      }
+      console.log(definitiveUrl);
+      //Crear objeto Con Notificación
+      let date = new Date();
+      let dayDate = date.getDate();
+      let monthDate = date.getMonth();
+      let yearDate = date.getFullYear();
+      let fecha = `${dayDate}/${monthDate}/${yearDate}`;
+      let notificacionObject = new Object();
+      notificacionObject["titulo"] = this.tituloProblema;
+      notificacionObject["texto"] = this.descripcionProblema;
+      notificacionObject["fecha"] = fecha;
+      notificacionObject["pendiente"] = true;
+      notificacionObject["url"] = definitiveUrl;
+
+      //Bajar objecto de propiedad con Notificaciones
+      let notificacionesObject = new Object();
+      let objetoPropiedadRef = db
+        .collection(`propiedades`)
+        .doc(this.$store.getters.chatRoom)
+        .get()
+        .then(snapshot => {
+          notificacionObject["key"] = snapshot.data().nombre;
+          notificacionesObject = snapshot.data().notificaciones;
+        })
+        .then(() => {
+          console.log("pusheando");
+          //Push nueva notificación en propiedad.notificaciones
+          notificacionesObject[notificacionObject.titulo] = notificacionObject;
+        })
+        .then(() => {
+          //Upload notificaciones object to its original place
+          let notificacionActualizada = db
+            .collection(`propiedades`)
+            .doc(this.$store.getters.chatRoom)
+            .update({ notificaciones: notificacionesObject })
+            .then(() => {
+              console.log("Notificación registrada y atualizada");
+            });
+
+          //Actualizado el campo problemas
+          let problemasRef = db
+            .collection("propiedades")
+            .doc(this.$store.getters.chatRoom)
+            .update({ problemas: true })
+            .then(() => {
+              console.log("problemas Actualizados también");
+              this.retrieveNotificaciones();
+            });
+        });
+    },
+    retrieveNotificaciones() {
+      let notificacionesRef = db
+        .collection("propiedades")
+        .doc(this.$store.getters.chatRoom)
+        .get()
+        .then(snapshot => {
+          this.$store.commit(
+            "setNotificaciones",
+            snapshot.data().notificaciones
+          );
+          this.$router.push("/tenantHome");
+        });
     }
   }
 };

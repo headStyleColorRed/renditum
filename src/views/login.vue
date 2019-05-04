@@ -136,19 +136,20 @@
             <div class="seleccionDeRol">
               <v-select :items="tenantOrLandlord" box label="Rol" v-model="role" dark></v-select>
             </div>
-          </div><div class="recuadro">
-          <div v-if="loading" class="lds-roller">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
           </div>
-          <button v-else v-on:click="validateInfo()" class="login-register">Regístrate</button>
-        </div>
+          <div class="recuadro">
+            <div v-if="loading" class="lds-roller">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+            <button v-else v-on:click="validateInfo()" class="login-register">Regístrate</button>
+          </div>
         </div>
       </div>
     </div>
@@ -170,7 +171,7 @@ export default {
     showSnack: false,
     password: "123456",
     contraseñaConf: "123456",
-    email: "irlandesmajere@hotmail.com",
+    email: "landlord@gmail.com",
     color: "primary",
     registering: false,
     loading: false,
@@ -219,13 +220,13 @@ export default {
           db.collection("users")
             .doc(loggedUser.user.uid)
             .onSnapshot(snapshot => {
-              console.log(snapshot.data());
+              console.log(snapshot.data().email);
               let finalUser = new Object();
               finalUser["uid"] = snapshot.data().uid;
               finalUser["email"] = snapshot.data().email;
               finalUser["nombre"] = snapshot.data().nombre;
 
-              this.$store.commit("setUser", finalUser)
+              this.$store.commit("setUser", finalUser);
               this.$store.commit("setRole", snapshot.data().role);
 
               if (snapshot.data().role == "Arrendador") {
@@ -286,7 +287,6 @@ export default {
           this.loading = false;
           this.giramelo = "rotateY(180deg)";
           this.user = DATA;
-          console.log(DATA);
         })
         .catch(err => {
           console.log(err);
@@ -314,22 +314,28 @@ export default {
       DATA["nombre"] = this.nombre;
       DATA["apellidos"] = this.apellidos;
       DATA["role"] = this.role;
+      DATA["chatRoom"] = null;
       db.collection("users")
         .doc(DATA.uid)
         .set(DATA)
         .then(() => {
+          let finalUser = new Object();
+          finalUser["uid"] = DATA.uid;
+          finalUser["email"] = DATA.email;
+          finalUser["nombre"] = DATA.nombre;
           this.$store.commit("setRole", DATA.role);
-          if (DATA.role === "Arrendador") {
-            this.$router.push("/landlordHome");
-          } else {
-            this.$router.push("/tenantHome");
-          }
-          console.log("Ya estás registrado!");
+          this.$store.commit("setUser", finalUser);
+          console.log("Ya estás registrado como" + DATA.email);
+          this.$router.push("/ultimoPaso")
         });
     },
     girar() {
       this.giramelo = "rotateY(180deg)";
     }
+  },
+  mounted() {
+    console.log("here is the truth!");
+    console.log(this.$store.state);
   },
   components: {}
 };

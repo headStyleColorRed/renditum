@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: rendita-37714.firebaseapp.com
+Token: 387d4c90dee4d1a1b2148b301e4a6876459a3a2eba8b1975916a9951312ccb1a

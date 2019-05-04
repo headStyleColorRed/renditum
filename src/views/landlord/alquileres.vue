@@ -29,8 +29,7 @@
         </v-btn>
       </v-card>
       <div style="display:grid" class="iconWrap">
-        
-      <v-icon class="icono" color="orange" v-on:click="newHouse()">add</v-icon>
+        <v-icon class="icono" color="orange" v-on:click="newHouse()">add</v-icon>
       </div>
     </div>
     <navbar/>
@@ -42,24 +41,29 @@ import navbar from "../../components/navbar.vue";
 export default {
   data() {
     return {
-      propiedades: {},
+      propiedades: {}
     };
   },
   mounted() {
-    this.propiedades = this.$store.getters.alquileres;
+
+    if (this.$store.getters.alquileres == null) {
+      this.propiedades = new Object();
+    } else {
+      this.propiedades = this.$store.getters.alquileres;
+    }
   },
   methods: {
     haciaAlquiler(event) {
-        this.$store.commit("setTemplate", event.nombre);
-        this.$router.push("/template");
+      this.$store.commit("setTemplate", event.nombre);
+      this.$router.push("/template");
     },
-    newHouse(){
-      this.$router.push("/newHouse")
+    newHouse() {
+      this.$router.push("/newHouse");
     }
   },
   computed: {},
   components: {
-    navbar,
+    navbar
   }
 };
 </script>
@@ -71,7 +75,7 @@ export default {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
-.alquileresWrapp{
+.alquileresWrapp {
   height: 100vh;
   overflow-y: scroll;
 }
@@ -104,7 +108,7 @@ export default {
   position: absolute;
 }
 
-.icono{
+.icono {
   justify-self: center;
   font-size: 2.5rem;
   margin-bottom: 5rem;

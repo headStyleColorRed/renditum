@@ -3,7 +3,7 @@ import firebase from "firebase";
 export default {
     state:{
         user: null,
-        role: "arrendador",
+        role: "Arrendador",
         logged: false,
     },
     actions:{
@@ -28,11 +28,16 @@ export default {
         },
         setRole: (state, role) =>{
             state.role = role;
-        }
+        },
+        resetAuthState (state) {
+            state.user = null;
+            state.role = null;
+            state.logged = false;
+         }
     },
     getters:{
         logged: (state) =>{
-            return !!state.user;
+            return state.logged;
         },
         role: (state) =>{
             return state.role;

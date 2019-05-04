@@ -70,9 +70,7 @@ export default {
       }
     },
     registerNewHouse() {
-      let user = this.$store.getters.user;
-      let userId = user.uid;    
-      let userUidCortado = userId.slice(0,5);
+      let userId = this.$store.getters.user.uid;
       let event = this.fileEvent;
       let uniqid = require("uniqid");
       let cifrado = uniqid.time();
@@ -82,11 +80,11 @@ export default {
       } else {
         let ref = firebase.storage().ref();
         let documentosAlquiler = event.target.files[0];
-        let nombreDeVivienda = documentosAlquiler.name;
+        let nombreDeVivienda = this.nombreAlquiler;
         let metadata = { contentType: documentosAlquiler.type };
 
         const task = ref
-          .child(`${userUidCortado}/${nombreDeVivienda}`)
+          .child(`${userId}/${nombreDeVivienda}`)
           .put(documentosAlquiler, metadata);
 
         task
@@ -103,25 +101,39 @@ export default {
       DATA["provincia"] = this.provinciaAlquiler;
       DATA["localidad"] = this.localidadAlquiler;
       DATA["cp"] = this.codigoPostalAlquiler;
-      DATA["fecha"] = null;
       DATA["cantidad"] = this.precioAlquiler;
       DATA["problemas"] = false;
       DATA["estado"] = "Desocupado";
+      DATA["pagado"] = {
+        landlord: false,
+        tenant: false
+      };
+      DATA["progresoPagoTotal"] = null;
+      DATA["progresoPagoInquilinos"] = null;
       DATA["notificaciones"] = new Object();
-      DATA["contrato"] = new Object();
+      DATA["contrato"] = null;
       DATA["inquilinos"] = new Object();
+      DATA["rentas"] = new Object();
       DATA["alertas"] = new Object();
-      DATA["notificaciones"] = new Object();
       DATA["chatRoom"] = cifrado;
 
-
-      db.collection(`compartido/propiedades/${userUidCortado}`)
-        .doc(DATA.nombre)
+      let dataRef = db
+        .collection(`propiedades`)
+        .doc(cifrado)
         .set(DATA)
         .then(() => {
-          let empty = {
-            loadIt: true
-          }
+          console.log("casa registrada");
+        });
+
+      let DataArrendador = new Object();
+      DataArrendador["nombre"] = DATA.nombre;
+      DataArrendador["chatRoom"] = DATA.chatRoom;
+      let dataArrendadorRef = db
+        .collection(`arrendador/${userId}/propiedades`)
+        .doc(DATA.nombre)
+        .set(DataArrendador)
+        .then(() => {
+          let empty = null;
           this.$store.commit("setAlquileres", empty);
           this.$router.push("/landlordHome");
 

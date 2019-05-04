@@ -10,7 +10,9 @@ import "firebase/firestore";
 import firebaseConfig from "./config/firebase.js"
 import VueChatScroll from 'vue-chat-scroll'
 import vuescroll from 'vue-scroll'
+import ImageUploader from 'vue-image-upload-resize'
 
+Vue.use(ImageUploader);
 Vue.use(vuescroll)
 Vue.use(VueChatScroll)
 firebase.initializeApp(firebaseConfig);
@@ -24,16 +26,16 @@ new Vue({
   render: h => h(App),
   mounted() {
     //Control loggins
-    if (store.state.authModule.logged) {
-      console.log("estás logeado");
-      if (store.state.authModule.role === "arrendatario") {
-        router.push("/tenantHome");
-      } else {
-        router.push("/landlordHome");
-      }
-    } else {
+    if (!store.state.authModule.logged) {
       console.log("no estás logeado");
       router.push("/")
+    } else {
+      console.log("estás logeado");
+      if (store.state.authModule.role == "Arrendatario") {
+        router.push("/tenantHome")
+      } else {
+        router.push("/landlordHome")
+      }
     }
   }
 }).$mount('#app')

@@ -2,10 +2,14 @@
   <div class="chat">
     <div class="chatWrapper">
       <div class="iconBackWrapper" style="display:grid">
-        <v-icon color="yellow" class="backIcon" v-on:click="paTras()">arrow_back</v-icon>
+        <v-icon color="yellow" class="backIcon" v-on:click="$router.go(-1)">arrow_back</v-icon>
       </div>
-      <div v-chat-scroll="{always: false, smooth: true, scrollonremoved:true}" class="chatTextArea">
-        <div v-if="loaded"  class="messagesWrap">
+      <div
+        v-chat-scroll="{always: false, smooth: true, scrollonremoved:true}"
+        class="chatTextArea"
+        id="input"
+      >
+        <div v-chat-scroll id="output" v-if="loaded" class="messagesWrap">
           <div v-for="(mensaje, index) in mensajes" :key="index" class="chatThumbnail">
             <!--if message received-->
             <div v-if="mensaje.origin != userId" class="headerReceived">
@@ -35,17 +39,15 @@
         </div>
       </div>
       <div class="inputArea">
-        <input :disabled="chatBlocked" type="text" placeholder="Escribe un mensaje" v-model="inputChat">
+        <input type="text" placeholder="Escribe un mensaje" v-model="inputChat">
         <v-icon v-if="messageReceived" v-on:click="configureMessage()">send</v-icon>
         <v-progress-circular size="24" v-else class="progreso" indeterminate color="orange"></v-progress-circular>
       </div>
     </div>
-    <tnavbar style="display:none"/>
   </div>
 </template>
 
 <script>
-import tnavbar from "../../components/tnavbar.vue";
 import firebase from "firebase";
 import { db } from "../../main.js";
 export default {
@@ -55,14 +57,12 @@ export default {
       inputChat: null,
       loaded: false,
       messageReceived: true,
-      addLandlord: true,
-      userId: this.$store.getters.user.uid,
-      chatBlocked: true,
+      userId: this.$store.getters.user.uid
     };
   },
   methods: {
     paTras() {
-      this.$router.push("/tenantHome");
+      this.$router.push("/landlordHome");
     },
     configureMessage() {
       if (this.$store.getters.chatRoom) {
@@ -87,7 +87,7 @@ export default {
       let uniqid = require("uniqid");
       let cifrado = uniqid.time();
 
-      let chatRoom = this.$store.getters.chatRoom;
+     let chatRoom = this.$store.getters.chatRoom;
       db.collection(`chatRoom/${chatRoom}/mensajes`)
         .doc(cifrado)
         .set(nuevoMensaje)
@@ -102,24 +102,18 @@ export default {
       let chatsRef = db
         .collection(`chatRoom/${chatRoom}/mensajes`)
         .onSnapshot(convo => {
+            console.log(chatRoom);
           convo.forEach(doc => {
             this.mensajes[doc.id] = doc.data();
           });
-          console.log(this.mensajes);
           this.loaded = false;
           this.loaded = true;
           this.messageReceived = true;
-        });
+        })
     }
   },
   mounted() {
     this.retreiveMessages();
-    if (this.$store.getters.chatRoom != null) {
-      this.chatBlocked = false;      
-    }
-  },
-  components: {
-    tnavbar
   }
 };
 </script>

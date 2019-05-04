@@ -1,5 +1,4 @@
 //import firebase from "firebase";
-import dataBase from "../assets/database/landlordPisos.json"
 
 export default {
     state:{
@@ -8,7 +7,10 @@ export default {
     mutations:{
         setTemplate: (state, template) =>{
             state.template = template;
-        }
+        },
+        resetLandlordState (state) {
+            state.template = null;
+         }
     },
     getters:{
         template: (state) =>{

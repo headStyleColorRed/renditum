@@ -4,6 +4,7 @@ import store from "./store.js"
 
 //S H A R E D 
 import login from './views/login.vue'
+import ultimoPaso from './views/ultimoPaso.vue'
 
 // L A N D L O R D
 import landlordHome from './views/landlord/landlordHome.vue'
@@ -11,13 +12,15 @@ import alquileres from './views/landlord/alquileres.vue'
 import landlordAgenda from './views/landlord/landlordAgenda.vue'
 import template from './views/landlord/template.vue'
 import newHouse from './views/landlord/newHouse.vue'
+import landLordChat from './views/landlord/landLordChat.vue'
 
 //T E N A N T
 import tenantHome from './views/tenant/tenantHome.vue'
 import arregloTemplate from './views/tenant/arregloTemplate.vue'
 import tenantChat from './views/tenant/chat.vue'
 import tenantAgenda from './views/tenant/tenantAgenda.vue'
-
+import notificacionTemplate from './views/tenant/notificacionTemplate.vue'
+notificacionTemplate
 Vue.use(Router)
 
 const router = new Router({
@@ -28,6 +31,11 @@ const router = new Router({
       path: '/',
       name: 'login',
       component: login
+    },
+    {
+      path: '/ultimoPaso',
+      name: 'ultimoPaso',
+      component: ultimoPaso
     },
     { path: "*", redirect: "/" },
 
@@ -60,6 +68,11 @@ const router = new Router({
       name: 'template',
       component: template
     },
+    {
+      path: '/landLordChat',
+      name: 'landLordChat',
+      component: landLordChat,
+    },
 
 
     // T E N A N T   R O U T E S
@@ -83,6 +96,11 @@ const router = new Router({
       path: '/tenantAgenda',
       name: 'tenantAgenda',
       component: tenantAgenda,
+    },
+    {
+      path: '/notificacionTemplate',
+      name: 'notificacionTemplate',
+      component: notificacionTemplate,
     },
   ]
 });
